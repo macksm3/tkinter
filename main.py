@@ -1,14 +1,20 @@
 # Glossary Project
 
+# import coin module for proof of concept testing
+from coin import Coin
+
 from tkinter import *
 # from PIL import ImageTk, Image
 
-# key down function
+
+# key down function from original test code
 def click(event = None):
     # entered_text = textentry.get()  # this will collect the text from the text entry box
     output.delete(0.0, END)
     output.insert(END, penny.get_subtotal(textentry.get()))
 
+
+# from BroCode
 def submit():
     username = entry.get()
     print(f"Hello {username}!")
@@ -28,6 +34,7 @@ def display():
         print("You agree!")
     else:
         print("You don't agree :(")
+
 
 food = ["pizza", "hamburger", "hotdog"]
 
@@ -69,51 +76,38 @@ def delete_from_list():
 
 
 '''
-# exit function
+# exit function replaced by direct button press to exit
 def close_window():
     window.destroy()
     exit()
 '''
 
-# create coin class
-class Coin:
-    def __init__(self, name, value):
-        self.name = name
-        self.value = float(value)
-        self.qty = 0
-        self.stackval = 0.00
-
-    def get_subtotal(self, qty_str):
-        """ get quantity of each coin and calculate total value """
-        self.qty = int(qty_str or 0)    # default input value set to 0
-        self.stackval = self.value * self.qty
-        return f"Total of {self.name}: {self.value} x {self.qty} = ${'{:,.2f}'.format(self.stackval)}"
+# instantiate coin here
+penny = Coin("pennies", 0.01)  # test project code
 
 
-# instantiate coins here
-penny = Coin("pennies", 0.01)
-
-##### main:
+# main window generation starts here
 window = Tk()
 window.title("Here is my Project")
 window.config(background="cyan")
 
+# from BroCode
 icon = PhotoImage(file='m3-blue-icon.png')
 window.iconphoto(True, icon)
 
-# exit button
+# exit button from original test project
 quit_button = Button(window, text="Exit Program", width=10, command=window.quit)
 quit_button.grid(row=0, column=0, sticky=N)
 
-##### My Photo
+# My Photo from original test project
 my_logo = PhotoImage(file="ConsultLogo2.png")
-logo_label = Label(window, image=my_logo, bg='yellow')
+logo_label = Label(window, image=my_logo, bg='cyan')
 logo_label.grid(row=0, column=1, columnspan=3)
 
-
+# from BroCode
 add_img = PhotoImage(file='M3 Logo.png')
 
-# create label
+# label hybrid from original and BroCode
 first_label = Label(window,
                     text="Enter something",
                     font="none 12 bold",
@@ -127,12 +121,12 @@ first_label = Label(window,
                     compound='right')
 first_label.grid(row=1, column=1, pady=2)
 
-# create text box
+# text box from the original test project as user entry
 textentry = Entry(window, width=10, bg="yellow")
 textentry.grid(row=2, column=0, sticky=E)
 textentry.focus()
 
-# create a text box
+# text box from original test project for output
 output = Text(window, width=50, height=4, wrap=WORD, background="yellow")
 output.grid(row=2, column=1)
 
@@ -172,6 +166,7 @@ delete_button.grid(row=3, column=3)
 backspace_button = Button(window, text="backspace", command=backspace)
 backspace_button.grid(row=3, column=2)
 
+
 checkbox_photo = PhotoImage(file='pgs_checked_icon.png')
 x = BooleanVar()
 check_button = Checkbutton(window,
@@ -190,6 +185,7 @@ check_button = Checkbutton(window,
                            image=checkbox_photo,
                            compound='left')
 check_button.grid(row=4, column=1)
+
 
 pizzaImage = PhotoImage(file='Crestron swirl 40x40.png')
 hamburgerImage = PhotoImage(file='CrestronBlue 40x40.png')
@@ -212,6 +208,9 @@ for index in range(len(food)):
                               )
     radiobutton.grid(row=index+6, column=1, sticky=W)
 
+scale_photo = PhotoImage(file='exclamation_point.gif')
+scale_label = Label(window, image=scale_photo, bg='cyan')
+scale_label.grid(row=9, column=0, sticky=E)
 scale = Scale(window,
               from_=0,
               to=100,
