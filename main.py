@@ -196,10 +196,6 @@ window.config(background="cyan")
 icon = PhotoImage(file='m3-blue-icon.png')
 window.iconphoto(True, icon)
 
-# exit button from original test project
-quit_button = Button(window, text="Exit Program", width=10, command=window.quit)
-quit_button.grid(row=0, column=0, sticky=N)
-
 # My Photo from original test project
 my_logo = PhotoImage(file="ConsultLogo2.png")
 logo_label = Label(window, image=my_logo, bg='cyan')
@@ -293,6 +289,7 @@ check_button = Checkbutton(window,
 check_button.grid(row=4, column=1)
 
 
+# radio buttons generated from list with for loop
 pizzaImage = PhotoImage(file='Crestron swirl 40x40.png')
 hamburgerImage = PhotoImage(file='CrestronBlue 40x40.png')
 hotdogImage = PhotoImage(file='crestron icon.png')
@@ -308,31 +305,42 @@ for index in range(len(food)):
                               font=("Impact", 20),
                               image=foodImages[index],       # adds image to radio button
                               compound='left',               # adds image and text (left side)
-                              indicatoron=0,                 # eliminate circle indicators
+                              indicatoron=False,                 # eliminate circle indicators
                               width=200,                     # sets width of radio buttons
                               command=order                 # set command of radiobutton to function
                               )
-    radiobutton.grid(row=index+6, column=1, sticky=W)
+    radiobutton.grid(row=index+6, column=1, sticky=E)
 
-scale_photo = PhotoImage(file='exclamation_point.gif')
-scale_label = Label(window, image=scale_photo, bg='cyan')
-scale_label.grid(row=9, column=0, sticky=E)
-scale = Scale(window,
+
+# scale = sliding numeric control
+scale_frame = Frame(window, bg='white', bd=3, relief=RIDGE)
+scale_frame.grid(row=9, column=1, columnspan=4, padx=20, pady=10)
+
+scale_cold = PhotoImage(file='icons8-snowflake-48.png')
+cold_label = Label(scale_frame, image=scale_cold, bg='cyan')
+cold_label.grid(row=9, column=0, padx=20, sticky=E)
+
+scale = Scale(scale_frame,
               from_=0,
               to=100,
               length=400,
               orient=HORIZONTAL,
               font=('FreeMono', 11, 'bold'),
               tickinterval=10,          # displays numbers along scale
-              showvalue=0,            # hide current value
-              resolution=5,              # create steps
+              #showvalue=0,            # hide current value
+              #resolution=5,              # create steps
               troughcolor='#00FF00',
               fg='#FF4800',
               bg='#111111',)
 scale.set(((scale['from']-scale['to'])/2) + scale['to'])               # starting value in middle
-scale.grid(row=9, column=1, pady=10)
-scale_button = Button(window, text='read scale', command=scale_submit)
-scale_button.grid(row=9, column=2)
+scale.grid(row=9, column=1, pady=20)
+
+scale_hot = PhotoImage(file='icons8-fire-48.png')
+hot_label = Label(scale_frame, image=scale_hot, bg='cyan')
+hot_label.grid(row=9, column=2, padx=20, sticky=W)
+
+scale_button = Button(scale_frame, text='read scale', command=scale_submit)
+scale_button.grid(row=9, column=3, padx=20)
 
 
 listbox = Listbox(window,
@@ -433,7 +441,11 @@ editMenu.add_command(label="Paste", command=paste)
 
 # create another label
 end_label = Label(window, text="\nThat's All Folks!", bg="white", fg="blue", font="none 12 bold")
-end_label.grid(row=30, column=0, columnspan=5, sticky=S, pady=30)
+end_label.grid(row=30, column=0, columnspan=5, sticky=S, pady=12)
+
+# exit button from original test project
+quit_button = Button(window, text="Exit Program", width=15, command=window.quit)
+quit_button.grid(row=31, column=0, columnspan=5, sticky=S)
 
 # run main loop
 window.mainloop()
