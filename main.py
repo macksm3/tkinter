@@ -7,11 +7,12 @@ from tkinter import *
 from tkinter import messagebox  # import messagebox library
 from tkinter import colorchooser  # submodule
 from tkinter import filedialog
+from tkinter import ttk
 # from PIL import ImageTk, Image
 
 
 # key down function from original test code
-def click(event=None):
+def click(event):
     # entered_text = textentry.get()  # this will collect the text from the text entry box
     output.delete(0.0, END)
     output.insert(END, penny.get_subtotal(textentry.get()))
@@ -173,7 +174,15 @@ def paste():
     print("You pasted some text")
 
 
+def create_window():
+    new_window = Toplevel()     #Toplevel() = new window on top of other windows, linked to a 'bottom' window
+    # new_window = Tk()      #Tk() = new independent window
+    # old_window.destroy()   # close out of old_window
 
+
+def doSomething(event):
+    # print("You pressed: " + event.keysym)
+    key_label.config(text=event.keysym)
 
 
 '''
@@ -249,7 +258,10 @@ button.grid(row=2, column=2, columnspan=3, sticky=W)
 window.bind('<Return>', click)
 window.bind('<KP_Enter>', click)
 
-entry = Entry(window,
+entryFrame = Frame(window)
+entryFrame.grid(row=3, column=1,columnspan=3)
+
+entry = Entry(entryFrame,
               font=("Comic Sans MS", 18),
               fg="#00FF00",
               bg="black",
@@ -257,16 +269,16 @@ entry = Entry(window,
 entry.insert(0, "enter text")
 #entry.config(show="*")  # replace every character with *
 #entry.config(state=DISABLED)
-entry.grid(row=3, column=1)
+entry.pack(side="left")
 
-submit_button = Button(window, text="submit", command=submit)
-submit_button.grid(row=3, column=4)
+submit_button = Button(entryFrame, text="submit", command=submit)
+submit_button.pack(side="right")
 
-delete_button = Button(window, text="delete", command=delete)
-delete_button.grid(row=3, column=3)
+delete_button = Button(entryFrame, text="delete", command=delete)
+delete_button.pack(side="right")
 
-backspace_button = Button(window, text="backspace", command=backspace)
-backspace_button.grid(row=3, column=2)
+backspace_button = Button(entryFrame, text="backspace", command=backspace)
+backspace_button.pack(side="right")
 
 
 checkbox_photo = PhotoImage(file='pgs_checked_icon.png')
@@ -296,8 +308,11 @@ hotdogImage = PhotoImage(file='crestron icon.png')
 foodImages = [pizzaImage, hamburgerImage, hotdogImage]
 f = IntVar()
 
+radioFrame = Frame(window, relief="raised", bd=5)
+radioFrame.grid(row=6, column=1, sticky=E)
+
 for index in range(len(food)):
-    radiobutton = Radiobutton(window,
+    radiobutton = Radiobutton(radioFrame,
                               text=food[index],     # adds text to radio buttons
                               variable=f,       # groups radiobuttons together if they share the same variable
                               value=index,       # assigns each radiobuton a different value
@@ -309,7 +324,7 @@ for index in range(len(food)):
                               width=200,                     # sets width of radio buttons
                               command=order                 # set command of radiobutton to function
                               )
-    radiobutton.grid(row=index+6, column=1, sticky=E)
+    radiobutton.pack()
 
 
 # scale = sliding numeric control
@@ -345,8 +360,8 @@ scale_button.grid(row=9, column=3, padx=20)
 
 listbox = Listbox(window,
                   bg="#f7ffde",
-                  font=("Constantia", 15),
-                  width=12,
+                  font=("Constantia", 14),
+                  width=14,
                   selectmode=MULTIPLE,
                   )
 listbox.grid(row=10, column=1, sticky=E)
@@ -384,7 +399,7 @@ messagebox_button.grid(row=12, column=1, sticky=W)
 text_area = Text(window,
                  bg='light yellow',
                  font=('FreeSerif', 15),
-                 height=8,
+                 height=5,
                  width=30,
                  padx=20,
                  pady=20,
@@ -405,7 +420,7 @@ file_save_button = Button(frame,
                            font=('Lato', 20),
                            fg='#00ff00',
                            bg='black')
-file_save_button.grid(row=1, column=1, pady=20, sticky=E)
+file_save_button.grid(row=1, column=1, pady=5, sticky=E)
 
 file_open_button = Button(frame,
                            command=openFile,
@@ -436,6 +451,50 @@ menubar.add_cascade(label="Edit", menu=editMenu)
 editMenu.add_command(label="Cut", command=cut)
 editMenu.add_command(label="Copy", command=copy)
 editMenu.add_command(label="Paste", command=paste)
+
+Button(window, text="create new window", command=create_window).grid(row=15, column=1, pady=20)
+
+notebook = ttk.Notebook(window)   # widget that manages a collection of windows/displays
+
+tab1 = Frame(notebook)      # new frame for tab 1
+tab2 = Frame(notebook)      # new frame for tab 2
+tab3 = Frame(notebook)      # new frame for tab 3
+
+notebook.add(tab1, text="Tab 1")
+notebook.add(tab2, text="Tab 2")
+notebook.add(tab3, text="Tab 3")
+notebook.grid(row=16, column=0, columnspan=2)
+# notebook.pack(expand=True, fill="both")    # expand to fill any space not otherwise used
+                                            # fill space on x and y axis
+
+Label(tab1, text="Hello, this is tab#1", width=50, height=5).pack()
+Label(tab2, text="Whatup', this is tab#2", width=50, height=5).pack()
+Label(tab3, text="Goodbye, this is tab#3", width=50, height=5).pack()
+
+
+# progress bar - import function breaks other things in this program
+# offloading it to separate file
+
+
+# canvas = widget that is used to draw graphs, plots, images in a window
+canvas = Canvas(window, height=250, width=400)
+# greenLine = canvas.create_line(0, 0, 400, 250, fill="green", width=5)
+# redLine = canvas.create_line(0, 250, 400, 0, fill="red", width=5)
+# canvas.create_rectangle(50, 50, 350, 200, fill="purple")
+# canvas.create_polygon(200, 0, 350, 250, 50, 250, fill="yellow")
+# points = [200, 0, 350, 100, 300, 250, 100, 250, 50, 100]
+points = [250, 10, 390, 100, 330, 240, 170, 240, 90, 100]
+canvas.create_polygon(points, fill="yellow", outline="black", width=3)
+# canvas.create_arc(0, 0, 250, 250, fill="blue", style=PIESLICE, start=90, extent=180)
+canvas.create_arc(10, 10, 240, 240, fill="red", extent=180, width=10)
+canvas.create_arc(10, 10, 240, 240, fill="white", extent=180, start=180, width=10)
+canvas.create_oval(80, 90, 170, 160, fill="white", width=10)
+canvas.grid(row=16, column=2, columnspan=3, padx=5)
+
+
+window.bind("<Key>", doSomething)
+key_label = Label(window, font=("FreeSerif", 100))
+key_label.grid(row=17, column=1)
 
 
 
